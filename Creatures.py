@@ -9,11 +9,14 @@ class Creatures:
         self.y = np.random.randint(0, self.Lim)
         self.prevX = None
         self.prevY = None
-        self.weights = np.random.rand(4)
+        self.weights = np.random.uniform(0, 1, 4)
         self.mvN = self.weights[0]
         self.mvE = self.weights[1]
         self.mvS = self.weights[2]
         self.mvW = self.weights[3]
+        self.setColor()
+
+    def setColor(self):
         self.color = 0
         for i in range(4):
             np.random.seed(np.int(self.weights[i] * 10000000))
@@ -40,17 +43,22 @@ class Creatures:
         elif self.y == 0:
             moves.remove("N")
             del weights[0]
-        move = np.random.choice(moves)
+
         self.prevX = copy(self.x)
         self.prevY = copy(self.y)
-        if move == "N":
-            self.y -= 1
-        elif move == "E":
-            self.x += 1
-        elif move == "S":
-            self.y += 1
-        elif move == "W":
-            self.x -= 1
+
+        for i, mv in enumerate(moves):
+            move = np.random.choice(["0", "1"], p=[weights[i], 1 - weights[i]])
+            if move == "1":
+                if mv == "N":
+                    self.y -= 1
+                elif mv == "E":
+                    self.x += 1
+                elif mv == "S":
+                    self.y += 1
+                elif mv == "W":
+                    self.x -= 1
+
         return (self.x, self.y)
 
 
